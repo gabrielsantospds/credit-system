@@ -9,8 +9,8 @@ import java.util.*
 
 @Service
 class CreditService(
-    private val creditRepository: CreditRepository,
-    private val customerService: CustomerService
+        private val creditRepository: CreditRepository,
+        private val customerService: CustomerService
 ) : ICreditService {
 
     override fun save(credit: Credit): Credit {
@@ -20,12 +20,12 @@ class CreditService(
         return this.creditRepository.save(credit)
     }
 
-    override fun findAllByCustomer(customerId: Long): List<Credit> {
-        TODO("Not yet implemented")
-    }
+    override fun findAllByCustomer(customerId: Long): List<Credit> = this.creditRepository.findAllByCustomer(customerId)
 
-    override fun findByCreditCode(creditCode: UUID): Credit {
-        TODO("Not yet implemented")
+    override fun findByCreditCode(customerId: Long, creditCode: UUID): Credit {
+        val credit: Credit = creditRepository.findByCreditCode(creditCode)
+                ?: throw RuntimeException("Credit code $creditCode not found")
+        return if(credit.customer?.id == customerId) credit else throw RuntimeException("Contact admin")
     }
 
 }
